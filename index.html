@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Resistance</title>
+  <style type="text/css" media="screen">
+body {
+  background-color: white;
+  color: black;
+}
+h3 {
+  margin-bottom: 0.5em;
+}
+section {
+  display: flex;
+  flex-flow: column nowrap;
+  flex: none;
+}
+ul.options {
+  list-style: none inside none;
+  margin: 0.5em;
+  padding: 0;
+}
+.hidden {
+  display: none;
+}
+.pink {
+  background-color: #ff69b4;
+}
+.silver {
+  background-color: #c0c0c0;
+}
+.gold {
+  background-color: #cfb53b;
+}
+.black {
+  background-color: black;
+  color: white;
+}
+.brown {
+  background-color: #964b00;
+  color: white;
+}
+.red {
+  background-color: red;
+  color: white;
+}
+.orange {
+  background-color: #ffa500;
+}
+.yellow {
+  background-color: yellow;
+}
+.green {
+  background-color: #9acd32;
+}
+.blue {
+  background-color: #6495ed;
+}
+.violet {
+  background-color: #9400d3;
+  color: white;
+}
+.grey {
+  background-color: #a0a0a0;
+}
+@media screen and (min-width: 640px) {
+  section {
+    flex-flow: row nowrap;
+  }
+}
+  </style>
+</head>
+
+<body>
+
+<main>
+<h1>The Resistance</h1>
+
+<p>If the resistor looks like</p>
+
+<canvas id="resistor"></canvas>
+
+<p>Then the resistance is <output id="resistance" for="banding"></output></p>
+
+<form id="banding" name="banding" action="" method="get">
+
+<div>
+<label for="bandCount">Number of bands:</label> <input type="number" id="bandCount" name="bandCount" value="4" min="3" max="5">
+</div>
+
+<section>
+
+<div id="band1Options">
+  <h3>Band 1</h3>
+  <ul class="options">
+    <li>
+      <input type="radio" id="band1None" name="band1" value="none"><label for="band1None">None</label>
+    </li>
+    <li class="pink">
+      <input type="radio" id="band1Pink" name="band1" value="pink"><label for="band1Pink">Pink</label>
+    </li>
+    <li class="silver">
+      <input type="radio" id="band1Silver" name="band1" value="silver"><label for="band1Silver">Silver</label>
+    </li>
+    <li class="gold">
+      <input type="radio" id="band1Gold" name="band1" value="gold"><label for="band1Gold">Gold</label>
+    </li>
+    <li class="black">
+      <input type="radio" id="band1Black" name="band1" value="black" checked><label for="band1Black">Black (0)</label>
+    </li>
+    <li class="brown">
+      <input type="radio" id="band1Brown" name="band1" value="brown"><label for="band1Brown">Brown (1)</label>
+    </li>
+    <li class="red">
+      <input type="radio" id="band1Red" name="band1" value="red"><label for="band1Red">Red (2)</label>
+    </li>
+    <li class="orange">
+      <input type="radio" id="band1Orange" name="band1" value="orange"><label for="band1Orange">Orange (3)</label>
+    </li>
+    <li class="yellow">
+      <input type="radio" id="band1Yellow" name="band1" value="yellow"><label for="band1Yellow">Yellow (4)</label>
+    </li>
+    <li class="green">
+      <input type="radio" id="band1Green" name="band1" value="green"><label for="band1Green">Green (5)</label>
+    </li>
+    <li class="blue">
+      <input type="radio" id="band1Blue" name="band1" value="blue"><label for="band1Blue">Blue (6)</label>
+    </li>
+    <li class="violet">
+      <input type="radio" id="band1Violet" name="band1" value="violet"><label for="band1Violet">Violet (7)</label>
+    </li>
+    <li class="grey">
+      <input type="radio" id="band1Grey" name="band1" value="grey"><label for="band1Grey">Grey (8)</label>
+    </li>
+    <li class="white">
+      <input type="radio" id="band1White" name="band1" value="white"><label for="band1White">White (9)</label>
+    </li>
+  </ul>
+</div>
+
+<div id="band2Options">
+  <h3>Band 2</h3>
+  <ul class="options">
+    <li>
+      <input type="radio" id="band2None" name="band2" value="none"><label for="band2None">None</label>
+    </li>
+    <li class="pink">
+      <input type="radio" id="band2Pink" name="band2" value="pink"><label for="band2Pink">Pink</label>
+    </li>
+    <li class="silver">
+      <input type="radio" id="band2Silver" name="band2" value="silver"><label for="band2Silver">Silver</label>
+    </li>
+    <li class="gold">
+      <input type="radio" id="band2Gold" name="band2" value="gold"><label for="band2Gold">Gold</label>
+    </li>
+    <li class="black">
+      <input type="radio" id="band2Black" name="band2" value="black" checked><label for="band2Black">Black (0)</label>
+    </li>
+    <li class="brown">
+      <input type="radio" id="band2Brown" name="band2" value="brown"><label for="band2Brown">Brown (1)</label>
+    </li>
+    <li class="red">
+      <input type="radio" id="band2Red" name="band2" value="red"><label for="band2Red">Red (2)</label>
+    </li>
+    <li class="orange">
+      <input type="radio" id="band2Orange" name="band2" value="orange"><label for="band2Orange">Orange (3)</label>
+    </li>
+    <li class="yellow">
+      <input type="radio" id="band2Yellow" name="band2" value="yellow"><label for="band2Yellow">Yellow (4)</label>
+    </li>
+    <li class="green">
+      <input type="radio" id="band2Green" name="band2" value="green"><label for="band2Green">Green (5)</label>
+    </li>
+    <li class="blue">
+      <input type="radio" id="band2Blue" name="band2" value="blue"><label for="band2Blue">Blue (6)</label>
+    </li>
+    <li class="violet">
+      <input type="radio" id="band2Violet" name="band2" value="violet"><label for="band2Violet">Violet (7)</label>
+    </li>
+    <li class="grey">
+      <input type="radio" id="band2Grey" name="band2" value="grey"><label for="band2Grey">Grey (8)</label>
+    </li>
+    <li class="white">
+      <input type="radio" id="band2White" name="band2" value="white"><label for="band2White">White (9)</label>
+    </li>
+  </ul>
+</div>
+
+<div id="band3Options" class="hidden">
+  <h3>Band 3</h3>
+  <ul class="options">
+    <li>
+      <input type="radio" id="band3None" name="band3" value="none" checked><label for="band3None">None</label>
+    </li>
+    <li class="pink">
+      <input type="radio" id="band3Pink" name="band3" value="pink"><label for="band3Pink">Pink</label>
+    </li>
+    <li class="silver">
+      <input type="radio" id="band3Silver" name="band3" value="silver"><label for="band3Silver">Silver</label>
+    </li>
+    <li class="gold">
+      <input type="radio" id="band3Gold" name="band3" value="gold"><label for="band3Gold">Gold</label>
+    </li>
+    <li class="black">
+      <input type="radio" id="band3Black" name="band3" value="black"><label for="band3Black">Black (0)</label>
+    </li>
+    <li class="brown">
+      <input type="radio" id="band3Brown" name="band3" value="brown"><label for="band3Brown">Brown (1)</label>
+    </li>
+    <li class="red">
+      <input type="radio" id="band3Red" name="band3" value="red"><label for="band3Red">Red (2)</label>
+    </li>
+    <li class="orange">
+      <input type="radio" id="band3Orange" name="band3" value="orange"><label for="band3Orange">Orange (3)</label>
+    </li>
+    <li class="yellow">
+      <input type="radio" id="band3Yellow" name="band3" value="yellow"><label for="band3Yellow">Yellow (4)</label>
+    </li>
+    <li class="green">
+      <input type="radio" id="band3Green" name="band3" value="green"><label for="band3Green">Green (5)</label>
+    </li>
+    <li class="blue">
+      <input type="radio" id="band3Blue" name="band3" value="blue"><label for="band3Blue">Blue (6)</label>
+    </li>
+    <li class="violet">
+      <input type="radio" id="band3Violet" name="band3" value="violet"><label for="band3Violet">Violet (7)</label>
+    </li>
+    <li class="grey">
+      <input type="radio" id="band3Grey" name="band3" value="grey"><label for="band3Grey">Grey (8)</label>
+    </li>
+    <li class="white">
+      <input type="radio" id="band3White" name="band3" value="white"><label for="band3White">White (9)</label>
+    </li>
+  </ul>
+</div>
+
+<div id="multiplierOptions">
+  <h3>Multiplier</h3>
+  <ul class="options">
+    <li>
+      <input type="radio" id="multiplierNone" name="multiplier" value="none"><label for="multiplierNone">None</label>
+    </li>
+    <li class="pink">
+      <input type="radio" id="multiplierPink" name="multiplier" value="pink"><label for="multiplierPink">Pink (&times;0.001)</label>
+    </li>
+    <li class="silver">
+      <input type="radio" id="multiplierSilver" name="multiplier" value="silver"><label for="multiplierSilver">Silver (&times;0.01)</label>
+    </li>
+    <li class="gold">
+      <input type="radio" id="multiplierGold" name="multiplier" value="gold"><label for="multiplierGold">Gold (&times;0.1)</label>
+    </li>
+    <li class="black">
+      <input type="radio" id="multiplierBlack" name="multiplier" value="black" checked><label for="multiplierBlack">Black (&times;1)</label>
+    </li>
+    <li class="brown">
+      <input type="radio" id="multiplierBrown" name="multiplier" value="brown"><label for="multiplierBrown">Brown (&times;10)</label>
+    </li>
+    <li class="red">
+      <input type="radio" id="multiplierRed" name="multiplier" value="red"><label for="multiplierRed">Red (&times;100)</label>
+    </li>
+    <li class="orange">
+      <input type="radio" id="multiplierOrange" name="multiplier" value="orange"><label for="multiplierOrange">Orange (&times;1000)</label>
+    </li>
+    <li class="yellow">
+      <input type="radio" id="multiplierYellow" name="multiplier" value="yellow"><label for="multiplierYellow">Yellow (&times;10000)</label>
+    </li>
+    <li class="green">
+      <input type="radio" id="multiplierGreen" name="multiplier" value="green"><label for="multiplierGreen">Green (&times;100000)</label>
+    </li>
+    <li class="blue">
+      <input type="radio" id="multiplierBlue" name="multiplier" value="blue"><label for="multiplierBlue">Blue (&times;1000000)</label>
+    </li>
+    <li class="violet">
+      <input type="radio" id="multiplierViolet" name="multiplier" value="violet"><label for="multiplierViolet">Violet (&times;10000000)</label>
+    </li>
+    <li class="grey">
+      <input type="radio" id="multiplierGrey" name="multiplier" value="grey"><label for="multiplierGrey">Grey (&times;100000000)</label>
+    </li>
+    <li class="white">
+      <input type="radio" id="multiplierWhite" name="multiplier" value="white"><label for="multiplierWhite">White (&times;1000000000)</label>
+    </li>
+  </ul>
+</div>
+
+<div id="toleranceOptions">
+  <h3>Tolerance</h3>
+  <ul class="options">
+    <li>
+      <input type="radio" id="toleranceNone" name="tolerance" value="none" checked><label for="toleranceNone">None (&pm;20%)</label>
+    </li>
+    <li class="pink">
+      <input type="radio" id="tolerancePink" name="tolerance" value="pink"><label for="tolerancePink">Pink</label>
+    </li>
+    <li class="silver">
+      <input type="radio" id="toleranceSilver" name="tolerance" value="silver"><label for="toleranceSilver">Silver (&pm;10%)</label>
+    </li>
+    <li class="gold">
+      <input type="radio" id="toleranceGold" name="tolerance" value="gold"><label for="toleranceGold">Gold (&pm;5%)</label>
+    </li>
+    <li class="black">
+      <input type="radio" id="toleranceBlack" name="tolerance" value="black"><label for="toleranceBlack">Black</label>
+    </li>
+    <li class="brown">
+      <input type="radio" id="toleranceBrown" name="tolerance" value="brown"><label for="toleranceBrown">Brown (&pm;1%)</label>
+    </li>
+    <li class="red">
+      <input type="radio" id="toleranceRed" name="tolerance" value="red"><label for="toleranceRed">Red (&pm;2%)</label>
+    </li>
+    <li class="orange">
+      <input type="radio" id="toleranceOrange" name="tolerance" value="orange"><label for="toleranceOrange">Orange (&pm;0.05%)</label>
+    </li>
+    <li class="yellow">
+      <input type="radio" id="toleranceYellow" name="tolerance" value="yellow"><label for="toleranceYellow">Yellow (&pm;0.02%)</label>
+    </li>
+    <li class="green">
+      <input type="radio" id="toleranceGreen" name="tolerance" value="green"><label for="toleranceGreen">Green (&pm;0.5%)</label>
+    </li>
+    <li class="blue">
+      <input type="radio" id="toleranceBlue" name="tolerance" value="blue"><label for="toleranceBlue">Blue (&pm;0.25%)</label>
+    </li>
+    <li class="violet">
+      <input type="radio" id="toleranceViolet" name="tolerance" value="violet"><label for="toleranceViolet">Violet (&pm;0.1%)</label>
+    </li>
+    <li class="grey">
+      <input type="radio" id="toleranceGrey" name="tolerance" value="grey"><label for="toleranceGrey">Grey (&pm;0.01%)</label>
+    </li>
+    <li class="white">
+      <input type="radio" id="toleranceWhite" name="tolerance" value="white"><label for="toleranceWhite">White</label>
+    </li>
+  </ul>
+</div>
+
+</section>
+
+</form>
+
+<h2>References</h2>
+
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Electronic_color_code" target="_blank">Electronic color code on Wikipedia</a></li>
+</ul>
+
+</main>
+
+<script>
+/*
+ * Map a color band to its properties
+ */
+let BAND_MAP = new Map();
+BAND_MAP.set('none', {
+  color: "",
+  value: 0,
+  multiplier: 0,
+  tolerance: "\u00B120%"
+});
+BAND_MAP.set('pink', {
+  color: "#ff69b4",
+  value: 0,
+  multiplier: 0.001,
+  tolerance: ""
+});
+BAND_MAP.set('silver', {
+  color: "#c0c0c0",
+  value: 0,
+  multiplier: 0.01,
+  tolerance: "\u00B110%"
+});
+BAND_MAP.set('gold', {
+  color: "#cfb53b",
+  value: 0,
+  multiplier: 0.1,
+  tolerance: "\u00B15%"
+});
+BAND_MAP.set('black', {
+  color: "#000000",
+  value: 0,
+  multiplier: 1,
+  tolerance: ""
+});
+BAND_MAP.set('brown', {
+  color: "#964b00",
+  value: 1,
+  multiplier: 10,
+  tolerance: "\u00B11%"
+});
+BAND_MAP.set('red', {
+  color: "#ff0000",
+  value: 2,
+  multiplier: 100,
+  tolerance: "\u00B12%"
+});
+BAND_MAP.set('orange', {
+  color: "#ffa500",
+  value: 3,
+  multiplier: 1000,
+  tolerance: "\u00B10.05%"
+});
+BAND_MAP.set('yellow', {
+  color: "#ffff00",
+  value: 4,
+  multiplier: 10000,
+  tolerance: "\u00B10.02%"
+});
+BAND_MAP.set('green', {
+  color: "#9acd32",
+  value: 5,
+  multiplier: 100000,
+  tolerance: "\u00B10.5%"
+});
+BAND_MAP.set('blue', {
+  color: "#6495ed",
+  value: 6,
+  multiplier: 1000000,
+  tolerance: "\u00B10.25%"
+});
+BAND_MAP.set('violet', {
+  color: "#9400d3",
+  value: 7,
+  multiplier: 10000000,
+  tolerance: "\u00B10.1%"
+});
+BAND_MAP.set('grey', {
+  color: "#a0a0a0",
+  value: 8,
+  multiplier: 100000000,
+  tolerance: "\u00B10.01%"
+});
+BAND_MAP.set('white', {
+  color: "#ffffff",
+  value: 9,
+  multiplier: 1000000000,
+  tolerance: ""
+});
+
+class Resistor {
+  constructor(band1 = 'none', band2 = 'none', band3 = 'none', multiplier = 'none', tolerance = 'none') {
+    this.band1 = Resistor.getValidValue(band1.trim().toLowerCase());
+    this.band2 = Resistor.getValidValue(band2.trim().toLowerCase());
+    this.band3 = Resistor.getValidValue(band3.trim().toLowerCase());
+    this.multiplier = Resistor.getValidValue(multiplier.trim().toLowerCase());
+    this.tolerance = Resistor.getValidValue(tolerance.trim().toLowerCase());
+  }
+  get band1Color() {
+    return BAND_MAP.get(this.band1).color;
+  }
+  get band2Color() {
+    return BAND_MAP.get(this.band2).color;
+  }
+  get band3Color() {
+    return BAND_MAP.get(this.band3).color;
+  }
+  get multiplierColor() {
+    return BAND_MAP.get(this.multiplier).color;
+  }
+  get toleranceColor() {
+    return BAND_MAP.get(this.tolerance).color;
+  }
+  get resistance() {
+    let values = [];
+    if (this.band1 != 'none') {
+      values.push('' + BAND_MAP.get(this.band1).value);
+    }
+    if (this.band2 != 'none') {
+      values.push('' + BAND_MAP.get(this.band2).value);
+    }
+    if (this.band3 != 'none') {
+      values.push('' + BAND_MAP.get(this.band3).value);
+    }
+    let value = Number(values.join('')) * BAND_MAP.get(this.multiplier).multiplier;
+    return (value + BAND_MAP.get(this.tolerance).tolerance + ' ohms');
+  }
+
+  static getValidValue(value, fallback = 'none') {
+    if (BAND_MAP.has(value)) {
+      return value;
+    }
+    else {
+      return fallback;
+    }
+  }
+
+  static test() {
+    for (let [value, expected] of [
+      ['foo', 'none'],
+      ['BAR', 'none'],
+      ['Baz', 'none'],
+      ['none', 'none']]) {
+      console.assert(Resistor.getValidValue(value) == expected,
+                     {msg: 'Resistor.getValidValue() is incorrect.'});
+    }
+    for (let value of BAND_MAP.keys()) {
+      console.assert(Resistor.getValidValue(value) == value,
+                     {msg: 'Resistor.getValidValue() is incorrect.'});
+      console.assert(Resistor.getValidValue(value.toUpperCase(), 'foobar') == 'foobar',
+                     {msg: 'Resistor.getValidValue() is incorrect.'});
+    }
+
+    function testResistor(resistor, band1Color, band2Color, band3Color, multiplierColor, toleranceColor, resistance) {
+      console.assert(resistor.band1Color == band1Color,
+                     {msg: 'band1Color is incorrect.'});
+      console.assert(resistor.band2Color == band2Color,
+                     {msg: 'band2Color is incorrect.'});
+      console.assert(resistor.band3Color == band3Color,
+                     {msg: 'band3Color is incorrect.'});
+      console.assert(resistor.multiplierColor == multiplierColor,
+                     {msg: 'multiplierColor is incorrect.'});
+      console.assert(resistor.toleranceColor == toleranceColor,
+                     {msg: 'toleranceColor is incorrect.'});
+      console.assert(resistor.resistance == resistance,
+                     {msg: 'resistance is incorrect.'});
+    }
+
+    let resistor = new Resistor();
+    testResistor(resistor, '', '', '', '', '', '0\u00B120% ohms');
+
+    resistor = new Resistor('none', 'NONE', 'None', 'nonE', 'nONe');
+    testResistor(resistor, '', '', '', '', '', '0\u00B120% ohms');
+
+    resistor = new Resistor('RED', 'red', 'blue', 'brown', 'brown');
+    testResistor(resistor, BAND_MAP.get('red').color, BAND_MAP.get('red').color, BAND_MAP.get('blue').color, BAND_MAP.get('brown').color, BAND_MAP.get('brown').color, '2260\u00B11% ohms');
+
+    resistor = new Resistor('green', 'Blue', 'black', 'black', 'brown');
+    testResistor(resistor, BAND_MAP.get('green').color, BAND_MAP.get('blue').color, BAND_MAP.get('black').color, BAND_MAP.get('black').color, BAND_MAP.get('brown').color, '560\u00B11% ohms');
+
+    resistor = new Resistor('red', 'red', 'NONE', 'orange', 'gold');
+    testResistor(resistor, BAND_MAP.get('red').color, BAND_MAP.get('red').color, '', BAND_MAP.get('orange').color, BAND_MAP.get('gold').color, '22000\u00B15% ohms');
+
+    resistor = new Resistor('yellow', 'violet', 'none', 'Brown', 'gold');
+    testResistor(resistor, BAND_MAP.get('yellow').color, BAND_MAP.get('violet').color, '', BAND_MAP.get('brown').color, BAND_MAP.get('gold').color, '470\u00B15% ohms');
+
+    resistor = new Resistor('blue', 'grey', 'none', 'black', 'GOLD');
+    testResistor(resistor, BAND_MAP.get('blue').color, BAND_MAP.get('grey').color, '', BAND_MAP.get('black').color, BAND_MAP.get('gold').color, '68\u00B15% ohms');
+
+    resistor = new Resistor(' red', 'violet ', 'none', ' green ', '  brown  ');
+    testResistor(resistor, BAND_MAP.get('red').color, BAND_MAP.get('violet').color, '', BAND_MAP.get('green').color, BAND_MAP.get('brown').color, '2700000\u00B11% ohms');
+
+    resistor = new Resistor('red', 'red', 'black', 'red', 'gold');
+    testResistor(resistor, BAND_MAP.get('red').color, BAND_MAP.get('red').color, BAND_MAP.get('black').color, BAND_MAP.get('red').color, BAND_MAP.get('gold').color, '22000\u00B15% ohms');
+  }
+}
+Resistor.test();
+
+class ResistorDisplay {
+  constructor(canvas, output, bandWidth = 20) {
+    if (!(canvas instanceof Node)) {
+      throw new TypeError('Bad canvas.');
+    }
+    if (!(output instanceof Node)) {
+      throw new TypeError('Bad output.');
+    }
+    this.canvas = canvas;
+    this.output = output;
+    this.bandWidth = bandWidth;
+    this.halfWidth = Math.floor(this.bandWidth / 2);
+  }
+  draw(resistor) {
+    // Write out the resistance value
+    this.output.textContent = resistor.resistance;
+
+    let context = this.canvas.getContext('2d'),
+        width = this.canvas.width,
+        height = this.canvas.height,
+        offsetX = Math.floor(width / 8),
+        centerY = Math.floor(height / 2),
+        x = 0;
+
+    // Draw the wire
+    context.fillStyle = '#a0a0a0';
+    context.fillRect(x, centerY - this.halfWidth, width, this.bandWidth);
+    x += offsetX;
+
+    // Draw the resistor body
+    context.fillStyle = '#f5f5dc';
+    context.fillRect(x, 0, width - (offsetX * 2), height);
+    x += offsetX;
+
+    // Draw the bands
+    let colors = [
+      resistor.band1Color,
+      resistor.band2Color,
+      resistor.band3Color,
+      resistor.multiplierColor,
+      resistor.toleranceColor
+    ];
+    for (let color of colors) {
+      if (color.startsWith('#')) {
+        context.fillStyle = color;
+        context.fillRect(x - this.halfWidth, 0, this.bandWidth, height);
+      }
+      x += offsetX;
+    }
+  }
+}
+
+let resistor = null;
+let display = new ResistorDisplay(document.querySelector('#resistor'), document.querySelector('#resistance'));
+let form = document.querySelector('#banding');
+function drawResistor() {
+  resistor = new Resistor(form.band1.value, form.band2.value, form.band3.value, form.multiplier.value, form.tolerance.value);
+  display.draw(resistor);
+}
+drawResistor();
+
+form.querySelector('#bandCount').addEventListener('change', (event) => {
+  let count = form.bandCount.value,
+      band3 = form.querySelector('#band3Options'),
+      tolerance = form.querySelector('#toleranceOptions');
+  if (count == 3) {
+    band3.className = 'hidden';
+    tolerance.className = 'hidden';
+    form.band3.value = 'none';
+    form.tolerance.value = 'none';
+  }
+  else if (count == 4) {
+    band3.className = 'hidden';
+    tolerance.className = '';
+    form.band3.value = 'none';
+  }
+  else {
+    band3.className = '';
+    tolerance.className = '';
+  }
+  drawResistor();
+});
+let radios = form.querySelectorAll('input[type="radio"]');
+for (let radio of Array.from(radios)) {
+  radio.addEventListener('change', (event) => {
+    drawResistor();
+  });
+}
+</script>
+</body>
+
+</html>
