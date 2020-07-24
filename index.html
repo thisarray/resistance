@@ -349,91 +349,77 @@ ul.options {
 /*
  * Map a color band to its properties
  */
-let BAND_MAP = new Map();
-BAND_MAP.set('none', {
-  color: "",
-  value: 0,
-  multiplier: 0,
-  tolerance: "\u00B120%"
-});
-BAND_MAP.set('pink', {
-  color: "#ff69b4",
-  value: 0,
-  multiplier: 0.001,
-  tolerance: ""
-});
-BAND_MAP.set('silver', {
-  color: "#c0c0c0",
-  value: 0,
-  multiplier: 0.01,
-  tolerance: "\u00B110%"
-});
-BAND_MAP.set('gold', {
-  color: "#cfb53b",
-  value: 0,
-  multiplier: 0.1,
-  tolerance: "\u00B15%"
-});
-BAND_MAP.set('black', {
-  color: "#000000",
-  value: 0,
-  multiplier: 1,
-  tolerance: ""
-});
-BAND_MAP.set('brown', {
-  color: "#964b00",
-  value: 1,
-  multiplier: 10,
-  tolerance: "\u00B11%"
-});
-BAND_MAP.set('red', {
-  color: "#ff0000",
-  value: 2,
-  multiplier: 100,
-  tolerance: "\u00B12%"
-});
-BAND_MAP.set('orange', {
-  color: "#ffa500",
-  value: 3,
-  multiplier: 1000,
-  tolerance: "\u00B10.05%"
-});
-BAND_MAP.set('yellow', {
-  color: "#ffff00",
-  value: 4,
-  multiplier: 10000,
-  tolerance: "\u00B10.02%"
-});
-BAND_MAP.set('green', {
-  color: "#9acd32",
-  value: 5,
-  multiplier: 100000,
-  tolerance: "\u00B10.5%"
-});
-BAND_MAP.set('blue', {
-  color: "#6495ed",
-  value: 6,
-  multiplier: 1000000,
-  tolerance: "\u00B10.25%"
-});
-BAND_MAP.set('violet', {
-  color: "#9400d3",
-  value: 7,
-  multiplier: 10000000,
-  tolerance: "\u00B10.1%"
-});
-BAND_MAP.set('grey', {
-  color: "#a0a0a0",
-  value: 8,
-  multiplier: 100000000,
-  tolerance: "\u00B10.01%"
-});
-BAND_MAP.set('white', {
-  color: "#ffffff",
-  value: 9,
-  multiplier: 1000000000,
-  tolerance: ""
-});
+const BAND_MAP = new Map([
+  ['none', {
+    color: "",
+    value: 0,
+    multiplier: 0,
+    tolerance: "\u00B120%"}],
+  ['pink', {
+    color: "#ff69b4",
+    value: 0,
+    multiplier: 0.001,
+    tolerance: ""}],
+  ['silver', {
+    color: "#c0c0c0",
+    value: 0,
+    multiplier: 0.01,
+    tolerance: "\u00B110%"}],
+  ['gold', {
+    color: "#cfb53b",
+    value: 0,
+    multiplier: 0.1,
+    tolerance: "\u00B15%"}],
+  ['black', {
+    color: "#000000",
+    value: 0,
+    multiplier: 1,
+    tolerance: ""}],
+  ['brown', {
+    color: "#964b00",
+    value: 1,
+    multiplier: 10,
+    tolerance: "\u00B11%"}],
+  ['red', {
+    color: "#ff0000",
+    value: 2,
+    multiplier: 100,
+    tolerance: "\u00B12%"}],
+  ['orange', {
+    color: "#ffa500",
+    value: 3,
+    multiplier: 1000,
+    tolerance: "\u00B10.05%"}],
+  ['yellow', {
+    color: "#ffff00",
+    value: 4,
+    multiplier: 10000,
+    tolerance: "\u00B10.02%"}],
+  ['green', {
+    color: "#9acd32",
+    value: 5,
+    multiplier: 100000,
+    tolerance: "\u00B10.5%"}],
+  ['blue', {
+    color: "#6495ed",
+    value: 6,
+    multiplier: 1000000,
+    tolerance: "\u00B10.25%"}],
+  ['violet', {
+    color: "#9400d3",
+    value: 7,
+    multiplier: 10000000,
+    tolerance: "\u00B10.1%"}],
+  ['grey', {
+    color: "#a0a0a0",
+    value: 8,
+    multiplier: 100000000,
+    tolerance: "\u00B10.01%"}],
+  ['white', {
+    color: "#ffffff",
+    value: 9,
+    multiplier: 1000000000,
+    tolerance: ""}]]);
 
 class Resistor {
   constructor(band1 = 'none', band2 = 'none', band3 = 'none', multiplier = 'none', tolerance = 'none') {
