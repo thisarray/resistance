@@ -348,73 +348,73 @@ fieldset ul.options {
 const BAND_MAP = new Map([
   ['none', {
     color: "",
-    value: 0,
-    multiplier: 0,
+    value: "0",
+    multiplier: "",
     tolerance: "\u00B120%"}],
   ['pink', {
     color: "#ff69b4",
-    value: 0,
-    multiplier: 0.001,
+    value: "0",
+    multiplier: "-3",
     tolerance: ""}],
   ['silver', {
     color: "#c0c0c0",
-    value: 0,
-    multiplier: 0.01,
+    value: "0",
+    multiplier: "-2",
     tolerance: "\u00B110%"}],
   ['gold', {
     color: "#cfb53b",
-    value: 0,
-    multiplier: 0.1,
+    value: "0",
+    multiplier: "-1",
     tolerance: "\u00B15%"}],
   ['black', {
     color: "#000000",
-    value: 0,
-    multiplier: 1,
+    value: "0",
+    multiplier: "",
     tolerance: ""}],
   ['brown', {
     color: "#964b00",
-    value: 1,
-    multiplier: 10,
+    value: "1",
+    multiplier: "0",
     tolerance: "\u00B11%"}],
   ['red', {
     color: "#ff0000",
-    value: 2,
-    multiplier: 100,
+    value: "2",
+    multiplier: "00",
     tolerance: "\u00B12%"}],
   ['orange', {
     color: "#ffa500",
-    value: 3,
-    multiplier: 1000,
+    value: "3",
+    multiplier: "000",
     tolerance: "\u00B10.05%"}],
   ['yellow', {
     color: "#ffff00",
-    value: 4,
-    multiplier: 10000,
+    value: "4",
+    multiplier: "0000",
     tolerance: "\u00B10.02%"}],
   ['green', {
     color: "#9acd32",
-    value: 5,
-    multiplier: 100000,
+    value: "5",
+    multiplier: "00000",
     tolerance: "\u00B10.5%"}],
   ['blue', {
     color: "#6495ed",
-    value: 6,
-    multiplier: 1000000,
+    value: "6",
+    multiplier: "000000",
     tolerance: "\u00B10.25%"}],
   ['violet', {
     color: "#9400d3",
-    value: 7,
-    multiplier: 10000000,
+    value: "7",
+    multiplier: "0000000",
     tolerance: "\u00B10.1%"}],
   ['grey', {
     color: "#a0a0a0",
-    value: 8,
-    multiplier: 100000000,
+    value: "8",
+    multiplier: "00000000",
     tolerance: "\u00B10.01%"}],
   ['white', {
     color: "#ffffff",
-    value: 9,
-    multiplier: 1000000000,
+    value: "9",
+    multiplier: "000000000",
     tolerance: ""}]]);
 
 class Resistor {
@@ -441,18 +441,61 @@ class Resistor {
     return BAND_MAP.get(this.tolerance).color;
   }
   get resistance() {
-    let values = [];
+    let multiplier = BAND_MAP.get(this.multiplier).multiplier,
+        values = [];
     if (this.band1 != 'none') {
-      values.push('' + BAND_MAP.get(this.band1).value);
+      values.push(BAND_MAP.get(this.band1).value);
     }
     if (this.band2 != 'none') {
-      values.push('' + BAND_MAP.get(this.band2).value);
+      values.push(BAND_MAP.get(this.band2).value);
     }
     if (this.band3 != 'none') {
-      values.push('' + BAND_MAP.get(this.band3).value);
+      values.push(BAND_MAP.get(this.band3).value);
     }
-    let value = Number(values.join('')) * BAND_MAP.get(this.multiplier).multiplier;
-    return (value + BAND_MAP.get(this.tolerance).tolerance + ' ohms');
+
+    if (multiplier.startsWith('-')) {
+      // If the decimal point needs to be moved
+      if (multiplier === '-1') {
+        // If multiplier is 0.1
+        if (values.length < 2) {
+          values.unshift('0.');
+        }
+        else {
+          values.splice(-1, 0, '.');
+        }
+      }
+      else if (multiplier === '-2') {
+        // If multiplier is 0.01
+        if (values.length < 2) {
+          values.unshift('0.0');
+        }
+        else if (values.length < 3) {
+          values.unshift('0.');
+        }
+        else {
+          values.splice(-2, 0, '.');
+        }
+      }
+      else if (multiplier === '-3') {
+        // If multiplier is 0.001
+        if (values.length < 2) {
+          values.unshift('0.00');
+        }
+        else if (values.length < 3) {
+          values.unshift('0.0');
+        }
+        else {
+          values.unshift('0.');
+        }
+      }
+    }
+    else {
+      // Multiplier is greater than or equal to 1 so just append 0s
+      values.push(multiplier);
+    }
+
+    values.push(BAND_MAP.get(this.tolerance).tolerance, ' ohms')
+    return values.join('');
   }
 
   static getValidValue(value, fallback = 'none') {
@@ -471,13 +514,13 @@ class Resistor {
       ['Baz', 'none'],
       ['none', 'none']]) {
       console.assert(Resistor.getValidValue(value) == expected,
-                     {msg: 'Resistor.getValidValue() is incorrect.'});
+                     {msg: 'Resistor.getValidValue() failed.'});
     }
     for (let value of BAND_MAP.keys()) {
       console.assert(Resistor.getValidValue(value) == value,
-                     {msg: 'Resistor.getValidValue() is incorrect.'});
+                     {msg: 'Resistor.getValidValue() failed.'});
       console.assert(Resistor.getValidValue(value.toUpperCase(), 'foobar') == 'foobar',
-                     {msg: 'Resistor.getValidValue() is incorrect.'});
+                     {msg: 'Resistor.getValidValue() failed.'});
     }
 
     function testResistor(resistor, band1Color, band2Color, band3Color, multiplierColor, toleranceColor, resistance) {
@@ -496,16 +539,40 @@ class Resistor {
     }
 
     let resistor = new Resistor();
-    testResistor(resistor, '', '', '', '', '', '0\u00B120% ohms');
+    testResistor(resistor, '', '', '', '', '', '\u00B120% ohms');
 
     resistor = new Resistor('none', 'NONE', 'None', 'nonE', 'nONe');
-    testResistor(resistor, '', '', '', '', '', '0\u00B120% ohms');
+    testResistor(resistor, '', '', '', '', '', '\u00B120% ohms');
+
+    resistor = new Resistor('Green', 'blue', 'black', 'brown', 'brown');
+    testResistor(resistor, BAND_MAP.get('green').color, BAND_MAP.get('blue').color, BAND_MAP.get('black').color, BAND_MAP.get('brown').color, BAND_MAP.get('brown').color, '5600\u00B11% ohms');
+
+    resistor = new Resistor('green', 'Blue', 'black', 'black', 'brown');
+    testResistor(resistor, BAND_MAP.get('green').color, BAND_MAP.get('blue').color, BAND_MAP.get('black').color, BAND_MAP.get('black').color, BAND_MAP.get('brown').color, '560\u00B11% ohms');
+
+    resistor = new Resistor('green', 'blue', 'Black', 'gold', 'brown');
+    testResistor(resistor, BAND_MAP.get('green').color, BAND_MAP.get('blue').color, BAND_MAP.get('black').color, BAND_MAP.get('gold').color, BAND_MAP.get('brown').color, '56.0\u00B11% ohms');
+
+    resistor = new Resistor('green', 'blue', 'black', 'Silver', 'brown');
+    testResistor(resistor, BAND_MAP.get('green').color, BAND_MAP.get('blue').color, BAND_MAP.get('black').color, BAND_MAP.get('silver').color, BAND_MAP.get('brown').color, '5.60\u00B11% ohms');
+
+    resistor = new Resistor('green', 'blue', 'black', 'pink', 'Brown');
+    testResistor(resistor, BAND_MAP.get('green').color, BAND_MAP.get('blue').color, BAND_MAP.get('black').color, BAND_MAP.get('pink').color, BAND_MAP.get('brown').color, '0.560\u00B11% ohms');
 
     resistor = new Resistor('RED', 'red', 'blue', 'brown', 'brown');
     testResistor(resistor, BAND_MAP.get('red').color, BAND_MAP.get('red').color, BAND_MAP.get('blue').color, BAND_MAP.get('brown').color, BAND_MAP.get('brown').color, '2260\u00B11% ohms');
 
-    resistor = new Resistor('green', 'Blue', 'black', 'black', 'brown');
-    testResistor(resistor, BAND_MAP.get('green').color, BAND_MAP.get('blue').color, BAND_MAP.get('black').color, BAND_MAP.get('black').color, BAND_MAP.get('brown').color, '560\u00B11% ohms');
+    resistor = new Resistor('red', 'RED', 'blue', 'black', 'brown');
+    testResistor(resistor, BAND_MAP.get('red').color, BAND_MAP.get('red').color, BAND_MAP.get('blue').color, BAND_MAP.get('black').color, BAND_MAP.get('brown').color, '226\u00B11% ohms');
+
+    resistor = new Resistor('red', 'red', 'BLUE', 'gold', 'brown');
+    testResistor(resistor, BAND_MAP.get('red').color, BAND_MAP.get('red').color, BAND_MAP.get('blue').color, BAND_MAP.get('gold').color, BAND_MAP.get('brown').color, '22.6\u00B11% ohms');
+
+    resistor = new Resistor('red', 'red', 'blue', 'SILVER', 'brown');
+    testResistor(resistor, BAND_MAP.get('red').color, BAND_MAP.get('red').color, BAND_MAP.get('blue').color, BAND_MAP.get('silver').color, BAND_MAP.get('brown').color, '2.26\u00B11% ohms');
+
+    resistor = new Resistor('red', 'red', 'blue', 'pink', 'BROWN');
+    testResistor(resistor, BAND_MAP.get('red').color, BAND_MAP.get('red').color, BAND_MAP.get('blue').color, BAND_MAP.get('pink').color, BAND_MAP.get('brown').color, '0.226\u00B11% ohms');
 
     resistor = new Resistor('red', 'red', 'NONE', 'orange', 'gold');
     testResistor(resistor, BAND_MAP.get('red').color, BAND_MAP.get('red').color, '', BAND_MAP.get('orange').color, BAND_MAP.get('gold').color, '22000\u00B15% ohms');
