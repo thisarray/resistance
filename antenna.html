@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antenna Length Calculator</title>
+  <style type="text/css" media="screen">
+body {
+  background-color: white;
+  color: black;
+}
+  </style>
+</head>
+
+<body>
+
+<main>
+<h1>Antenna Length Calculator</h1>
+
+<form id="calculator" name="calculator">
+
+<p><label>Frequency:
+<input type="text" id="frequency" name="frequency" autofocus required maxlength="5" minlength="1" pattern="[0-9]+" placeholder="433" spellcheck="false">
+MHz</label></p>
+
+<p><label>Optional custom ratio:
+<input type="text" id="ratio" name="ratio" maxlength="5" minlength="3" pattern="[0-9].[0-9]+" placeholder="0.48" spellcheck="false">
+</label></p>
+
+<p><button type="submit">Calculate</button></p>
+
+<output id="result"></output>
+
+</form>
+
+</main>
+
+<script>
+/*
+ * Number of centimeters in an inch.
+ */
+const CM_TO_IN = 2.54;
+
+/*
+ * Integer speed of light in centimeters per second.
+ */
+const SPEED_OF_LIGHT = 29979245800;
+
+/*
+ * Return a length in inches calculated from a length in centimeters.
+ */
+function centimeter_to_inch(value) {
+  return value / CM_TO_IN;
+}
+
+const OUTPUT = document.querySelector('#result');
+
+const FORM = document.querySelector('#calculator');
+FORM.addEventListener('submit', (event) => {
+  let frequency = parseInt(FORM.frequency.value + '000000', 10),
+      wavelength = SPEED_OF_LIGHT / frequency,
+      variations = [
+        ['Half', 0.5],
+        ['Quarter', 0.25]
+      ],
+      length, paragraph;
+  if (FORM.ratio.value.length > 0) {
+    variations.push([FORM.ratio.value, parseFloat(FORM.ratio.value)]);
+  }
+
+  OUTPUT.innerHTML = '';
+  paragraph = document.createElement('p');
+  paragraph.appendChild(document.createTextNode(`${ Math.floor(frequency / 1000000).toFixed() } MHz has a wavelength of ${ wavelength.toFixed(2) } cm (${ centimeter_to_inch(wavelength).toFixed(2) } in).`));
+  OUTPUT.appendChild(paragraph);
+  for (let [label, ratio] of variations) {
+    length = wavelength * ratio;
+    paragraph = document.createElement('p');
+    paragraph.appendChild(document.createTextNode(`${ label } wave antenna: ${ length.toFixed(2) } cm (${ centimeter_to_inch(length).toFixed(2) } in).`));
+    OUTPUT.appendChild(paragraph);
+  }
+
+  event.preventDefault();
+});
+</script>
+</body>
+
+</html>
