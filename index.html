@@ -13,10 +13,14 @@ body {
 fieldset {
   margin: 0.5em;
 }
-fieldset ul.options {
+ul {
   list-style: none inside none;
   margin: 0.5em;
   padding: 0;
+}
+ul.numbers {
+  display: flex;
+  flex-flow: row nowrap;
 }
 .hidden {
   display: none;
@@ -79,13 +83,23 @@ fieldset ul.options {
 
 <canvas id="resistor"></canvas>
 
-<p>Then the resistance is <output id="resistance" for="banding"></output></p>
+<p>then the resistance is <output id="resistance" for="banding"></output>.</p>
 
 <form id="banding" name="banding">
-
-<div>
-<label for="bandCount">Number of bands:</label> <input type="number" id="bandCount" name="bandCount" value="4" min="3" max="5">
-</div>
+<fieldset>
+  <legend>Number of bands</legend>
+  <ul class="numbers">
+    <li>
+      <label><input type="radio" name="bandCount" value="3" checked> 3</label>
+    </li>
+    <li>
+      <label><input type="radio" name="bandCount" value="4"> 4</label>
+    </li>
+    <li>
+      <label><input type="radio" name="bandCount" value="5"> 5</label>
+    </li>
+  </ul>
+</fieldset>
 
 <section>
 
@@ -343,88 +357,107 @@ fieldset ul.options {
 
 <script>
 /*
- * Map a color band to its properties
+ * Map a color band to its properties.
  */
 const BAND_MAP = new Map([
   ['none', {
-    color: "",
-    value: "0",
-    multiplier: "",
-    tolerance: "\u00B120%"}],
+    color: '',
+    value: '0',
+    multiplier: '',
+    tolerance: '\u00B120%'
+  }],
   ['pink', {
-    color: "#ff69b4",
-    value: "0",
-    multiplier: "-3",
-    tolerance: ""}],
+    color: '#ff69b4',
+    value: '0',
+    multiplier: '-3',
+    tolerance: ''
+  }],
   ['silver', {
-    color: "#c0c0c0",
-    value: "0",
-    multiplier: "-2",
-    tolerance: "\u00B110%"}],
+    color: '#c0c0c0',
+    value: '0',
+    multiplier: '-2',
+    tolerance: '\u00B110%'
+  }],
   ['gold', {
-    color: "#cfb53b",
-    value: "0",
-    multiplier: "-1",
-    tolerance: "\u00B15%"}],
+    color: '#cfb53b',
+    value: '0',
+    multiplier: '-1',
+    tolerance: '\u00B15%'
+  }],
   ['black', {
-    color: "#000000",
-    value: "0",
-    multiplier: "",
-    tolerance: ""}],
+    color: 'black',
+    value: '0',
+    multiplier: '',
+    tolerance: ''
+  }],
   ['brown', {
-    color: "#964b00",
-    value: "1",
-    multiplier: "0",
-    tolerance: "\u00B11%"}],
+    color: '#964b00',
+    value: '1',
+    multiplier: '0',
+    tolerance: '\u00B11%'
+  }],
   ['red', {
-    color: "#ff0000",
-    value: "2",
-    multiplier: "00",
-    tolerance: "\u00B12%"}],
+    color: 'red',
+    value: '2',
+    multiplier: '0'.repeat(2),
+    tolerance: '\u00B12%'
+  }],
   ['orange', {
-    color: "#ffa500",
-    value: "3",
-    multiplier: "000",
-    tolerance: "\u00B10.05%"}],
+    color: '#ffa500',
+    value: '3',
+    multiplier: '0'.repeat(3),
+    tolerance: '\u00B10.05%'
+  }],
   ['yellow', {
-    color: "#ffff00",
-    value: "4",
-    multiplier: "0000",
-    tolerance: "\u00B10.02%"}],
+    color: 'yellow',
+    value: '4',
+    multiplier: '0'.repeat(4),
+    tolerance: '\u00B10.02%'
+  }],
   ['green', {
-    color: "#9acd32",
-    value: "5",
-    multiplier: "00000",
-    tolerance: "\u00B10.5%"}],
+    color: '#9acd32',
+    value: '5',
+    multiplier: '0'.repeat(5),
+    tolerance: '\u00B10.5%'
+  }],
   ['blue', {
-    color: "#6495ed",
-    value: "6",
-    multiplier: "000000",
-    tolerance: "\u00B10.25%"}],
+    color: '#6495ed',
+    value: '6',
+    multiplier: '0'.repeat(6),
+    tolerance: '\u00B10.25%'
+  }],
   ['violet', {
-    color: "#9400d3",
-    value: "7",
-    multiplier: "0000000",
-    tolerance: "\u00B10.1%"}],
+    color: '#9400d3',
+    value: '7',
+    multiplier: '0'.repeat(7),
+    tolerance: '\u00B10.1%'
+  }],
   ['grey', {
-    color: "#a0a0a0",
-    value: "8",
-    multiplier: "00000000",
-    tolerance: "\u00B10.01%"}],
+    color: '#a0a0a0',
+    value: '8',
+    multiplier: '0'.repeat(8),
+    tolerance: '\u00B10.01%'
+  }],
   ['white', {
-    color: "#ffffff",
-    value: "9",
-    multiplier: "000000000",
-    tolerance: ""}]]);
+    color: 'white',
+    value: '9',
+    multiplier: '0'.repeat(9),
+    tolerance: ''
+  }]
+]);
 
+/*
+ * Class to represent a resistor.
+ */
 class Resistor {
   constructor(band1 = 'none', band2 = 'none', band3 = 'none', multiplier = 'none', tolerance = 'none') {
-    this.band1 = Resistor.getValidValue(band1.trim().toLowerCase());
-    this.band2 = Resistor.getValidValue(band2.trim().toLowerCase());
-    this.band3 = Resistor.getValidValue(band3.trim().toLowerCase());
-    this.multiplier = Resistor.getValidValue(multiplier.trim().toLowerCase());
-    this.tolerance = Resistor.getValidValue(tolerance.trim().toLowerCase());
+    this.band1 = Resistor.getValidValue(band1);
+    this.band2 = Resistor.getValidValue(band2);
+    this.band3 = Resistor.getValidValue(band3);
+    this.multiplier = Resistor.getValidValue(multiplier);
+    this.tolerance = Resistor.getValidValue(tolerance);
   }
+
   get band1Color() {
     return BAND_MAP.get(this.band1).color;
   }
@@ -443,18 +476,18 @@ class Resistor {
   get resistance() {
     let multiplier = BAND_MAP.get(this.multiplier).multiplier,
         values = [];
-    if (this.band1 != 'none') {
+    if (this.band1 !== 'none') {
       values.push(BAND_MAP.get(this.band1).value);
     }
-    if (this.band2 != 'none') {
+    if (this.band2 !== 'none') {
       values.push(BAND_MAP.get(this.band2).value);
     }
-    if (this.band3 != 'none') {
+    if (this.band3 !== 'none') {
       values.push(BAND_MAP.get(this.band3).value);
     }
 
     if (multiplier.startsWith('-')) {
-      // If the decimal point needs to be moved
+      // If the decimal point needs to be moved left
       if (multiplier === '-1') {
         // If multiplier is 0.1
         if (values.length < 2) {
@@ -494,11 +527,16 @@ class Resistor {
       values.push(multiplier);
     }
 
-    values.push(BAND_MAP.get(this.tolerance).tolerance, ' ohms')
+    values.push(BAND_MAP.get(this.tolerance).tolerance, ' ohms');
     return values.join('');
   }
 
   static getValidValue(value, fallback = 'none') {
+    if (typeof value !== 'string') {
+      throw new TypeError('value must be a non-empty string.');
+    }
+    value = value.trim().toLowerCase();
+
     if (BAND_MAP.has(value)) {
       return value;
     }
@@ -508,33 +546,31 @@ class Resistor {
   }
 
   static test() {
-    for (let [value, expected] of [
-      ['foo', 'none'],
-      ['BAR', 'none'],
-      ['Baz', 'none'],
-      ['none', 'none']]) {
-      console.assert(Resistor.getValidValue(value) == expected,
+    for (let value of ['foo', 'BAR', 'Baz', 'none']) {
+      console.assert(Resistor.getValidValue(value) === 'none',
                      {msg: 'Resistor.getValidValue() failed.'});
     }
     for (let value of BAND_MAP.keys()) {
-      console.assert(Resistor.getValidValue(value) == value,
+      console.assert(Resistor.getValidValue(value) === value,
                      {msg: 'Resistor.getValidValue() failed.'});
-      console.assert(Resistor.getValidValue(value.toUpperCase(), 'foobar') == 'foobar',
+      console.assert(Resistor.getValidValue(value.toUpperCase(), 'foobar') === value,
+                     {msg: 'Resistor.getValidValue() failed.'});
+      console.assert(Resistor.getValidValue('foo' + value) === 'none',
                      {msg: 'Resistor.getValidValue() failed.'});
     }
 
     function testResistor(resistor, band1Color, band2Color, band3Color, multiplierColor, toleranceColor, resistance) {
-      console.assert(resistor.band1Color == band1Color,
+      console.assert(resistor.band1Color === band1Color,
                      {msg: 'band1Color is incorrect.'});
-      console.assert(resistor.band2Color == band2Color,
+      console.assert(resistor.band2Color === band2Color,
                      {msg: 'band2Color is incorrect.'});
-      console.assert(resistor.band3Color == band3Color,
+      console.assert(resistor.band3Color === band3Color,
                      {msg: 'band3Color is incorrect.'});
-      console.assert(resistor.multiplierColor == multiplierColor,
+      console.assert(resistor.multiplierColor === multiplierColor,
                      {msg: 'multiplierColor is incorrect.'});
-      console.assert(resistor.toleranceColor == toleranceColor,
+      console.assert(resistor.toleranceColor === toleranceColor,
                      {msg: 'toleranceColor is incorrect.'});
-      console.assert(resistor.resistance == resistance,
+      console.assert(resistor.resistance === resistance,
                      {msg: 'resistance is incorrect.'});
     }
 
@@ -605,6 +641,7 @@ class ResistorDisplay {
     this.bandWidth = bandWidth;
     this.halfWidth = Math.floor(this.bandWidth / 2);
   }
+
   draw(resistor) {
     // Write out the resistance value
     this.output.textContent = resistor.resistance;
@@ -617,7 +654,7 @@ class ResistorDisplay {
         x = 0;
 
     // Draw the wire
-    context.fillStyle = '#a0a0a0';
+    context.fillStyle = BAND_MAP.get('grey').color;
     context.fillRect(x, centerY - this.halfWidth, width, this.bandWidth);
     x += offsetX;
 
@@ -627,15 +664,14 @@ class ResistorDisplay {
     x += offsetX;
 
     // Draw the bands
-    let colors = [
+    for (let color of [
       resistor.band1Color,
       resistor.band2Color,
       resistor.band3Color,
       resistor.multiplierColor,
       resistor.toleranceColor
-    ];
-    for (let color of colors) {
-      if (color.startsWith('#')) {
+    ]) {
+      if (color.length > 0) {
         context.fillStyle = color;
         context.fillRect(x - this.halfWidth, 0, this.bandWidth, height);
       }
@@ -644,25 +680,21 @@ class ResistorDisplay {
   }
 }
 
-let resistor = null;
 const display = new ResistorDisplay(document.querySelector('#resistor'), document.querySelector('#resistance'));
 const form = document.querySelector('#banding');
-function drawResistor() {
-  resistor = new Resistor(form.band1.value, form.band2.value, form.band3.value, form.multiplier.value, form.tolerance.value);
-  display.draw(resistor);
-}
 
-form.querySelector('#bandCount').addEventListener('change', (event) => {
-  let count = form.bandCount.value,
+function updateResistor() {
+  let count = parseInt(form.bandCount.value, 10),
       band3 = form.querySelector('#band3Options'),
-      tolerance = form.querySelector('#toleranceOptions');
-  if (count == 3) {
+      tolerance = form.querySelector('#toleranceOptions'),
+      resistor;
+  if (count === 3) {
     band3.setAttribute('class', 'hidden');
     tolerance.setAttribute('class', 'hidden');
     form.band3.value = 'none';
     form.tolerance.value = 'none';
   }
-  else if (count == 4) {
+  else if (count === 4) {
     band3.setAttribute('class', 'hidden');
     tolerance.setAttribute('class', '');
     form.band3.value = 'none';
@@ -671,15 +703,14 @@ form.querySelector('#bandCount').addEventListener('change', (event) => {
     band3.setAttribute('class', '');
     tolerance.setAttribute('class', '');
   }
-  drawResistor();
-});
-for (let radio of Array.from(form.querySelectorAll('input[type="radio"]'))) {
-  radio.addEventListener('change', (event) => {
-    drawResistor();
-  });
+  resistor = new Resistor(form.band1.value, form.band2.value, form.band3.value, form.multiplier.value, form.tolerance.value);
+  display.draw(resistor);
 }
 
-drawResistor();
+for (let radio of Array.from(form.querySelectorAll('input[type="radio"]'))) {
+  radio.addEventListener('change', updateResistor);
+}
+updateResistor();
 </script>
 </body>
 
